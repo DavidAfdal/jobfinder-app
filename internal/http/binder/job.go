@@ -5,6 +5,9 @@ import "github.com/google/uuid"
 type JobFindByIDRequest struct {
 	ID string `param:"id" validate:"required"`
 }
+type DeleteJobRequest struct {
+	ID string `param:"id" validate:"required"`
+}
 type FindSharedJobsRequest struct {
 	UserID string `param:"userID" validate:"required"`
 }

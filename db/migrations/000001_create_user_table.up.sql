@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     address TEXT,
+    role VARCHAR(80) NOT NULL,
     phone_number VARCHAR(15),
     gender VARCHAR(20),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),

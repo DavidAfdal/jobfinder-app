@@ -99,7 +99,17 @@ func (h *userHandler) UpdateUser(ctx echo.Context) error {
 }
 
 func (h *userHandler) DeleteUser(ctx echo.Context) error {
-	return nil
+	dataUser, _ := ctx.Get("user").(*jwt.Token)
+	claims := dataUser.Claims.(*token.JwtCustomClaims)
+
+
+	isDeleted, err := h.userService.DeleteUser(claims.ID)
+
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, response.ErrorResponse(http.StatusInternalServerError, err.Error()))
+	}
+
+	return ctx.JSON(http.StatusOK, response.SuccessResponse(http.StatusOK, "success delete user", isDeleted))
 }
 
 func (h *userHandler) ProfileUser(ctx echo.Context) error {

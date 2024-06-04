@@ -67,6 +67,11 @@ func AppPrivateRoute(userHandler handler.UserHandler,  jobHandler handler.JobHan
 			Handler: userHandler.UpdateUser,
 		},
 		{
+			Methode: http.MethodDelete,
+			Path: "/users",
+			Handler: userHandler.DeleteUser,
+		},
+		{
 			Methode: http.MethodGet,
 			Path:    "/jobs/shared",
 			Handler: jobHandler.FindSharedJobs,
@@ -85,6 +90,11 @@ func AppPrivateRoute(userHandler handler.UserHandler,  jobHandler handler.JobHan
 			Methode: http.MethodPatch,
 			Path: "/jobs/:id",
 			Handler: jobHandler.UpdateJob,
+		},
+		{
+			Methode: http.MethodDelete,
+			Path: "/jobs/:id",
+			Handler: jobHandler.DeleteJob,
 		},
 		{
 			Methode: http.MethodPost,

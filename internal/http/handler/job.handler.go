@@ -21,7 +21,7 @@ type JobHandler interface {
 	UpdateJob(ctx echo.Context) error
 	FindSharedJobs(ctx echo.Context)error
 	FindAppliedJobs(ctx echo.Context)error
-	// DeleteJob(ctx echo.Context) error
+	DeleteJob(ctx echo.Context) error
 }
 
 type jobHandler struct {
@@ -123,4 +123,22 @@ func (h *jobHandler) UpdateJob(ctx echo.Context) error {
    }
 
    return ctx.JSON(http.StatusOK, response.SuccessResponse(http.StatusOK, "success update job", updatedJob))
+}
+
+func (h *jobHandler) DeleteJob(ctx echo.Context) error {
+	var input binder.DeleteJobRequest
+
+	if err := ctx.Bind(&input); err != nil {
+		return ctx.JSON(http.StatusBadRequest, response.ErrorResponse(http.StatusBadRequest, err.Error()))
+	}
+
+	id := uuid.MustParse(input.ID)
+
+	isDeleted, err := h.jobService.DeleteJob(id)
+
+	if err != nil {
+		return ctx.JSON(http.StatusInternalServerError, response.ErrorResponse(http.StatusInternalServerError, err.Error()))
+	}
+
+	return ctx.JSON(http.StatusOK, response.SuccessResponse(http.StatusOK, "success delete job", isDeleted))
 }
