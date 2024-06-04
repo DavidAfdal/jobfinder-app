@@ -1,0 +1,9 @@
+BEGIN;
+
+DROP TABLE IF EXISTS categories;
+
+COMMIT;
+
+
+
+
