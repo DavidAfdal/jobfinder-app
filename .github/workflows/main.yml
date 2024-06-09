@@ -43,5 +43,5 @@ jobs:
           script: |
             whoami
             docker stop finder-job || true && docker rm finder-job || true
-            docker pull ${{ vars.IMAGE_NAME }}
-            docker run -d -p 1213:1213 --name ${{ vars.CONTAINER_NAME }} ${{ vars.IMAGE_NAME }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/finder-job:latest
+            docker run -d -p 1213:1213 --name ${{ vars.CONTAINER_NAME }} ${{ secrets.DOCKER_USERNAME }}/finder-job:latest
