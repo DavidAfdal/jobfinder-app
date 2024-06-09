@@ -29,6 +29,14 @@ func NewCategoryHandler(categoryService service.CategoryService) CategoryHandler
 	return &categoryHandler{categoryService}
 }
 
+// FindAllCategory godoc
+// @Summary Get all categories
+// @Description Get all categories
+// @Tags categories
+// @Produce json
+// @Success 200 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /categories [get]
 func (h *categoryHandler) FindAllCategory(ctx echo.Context) error {
 	categories, err := h.categoryService.FindAllCategory()
 
@@ -40,6 +48,17 @@ func (h *categoryHandler) FindAllCategory(ctx echo.Context) error {
 
 }
 
+
+// FindCategoryByID godoc
+// @Summary Get a category by ID
+// @Description Get a category by ID
+// @Tags categories
+// @Produce json
+// @Param id path string true "Category ID"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /categories/{id} [get]
 func (c *categoryHandler) FindCategoryByID(ctx echo.Context)  error {
     var input binder.FindCategoryByIDRequest
 
@@ -57,7 +76,17 @@ func (c *categoryHandler) FindCategoryByID(ctx echo.Context)  error {
 	return ctx.JSON(http.StatusOK, response.SuccessResponse(http.StatusOK, "success get category", category))
 }
 
-
+// CreateCategory godoc
+// @Summary Create a new category
+// @Description Create a new category
+// @Tags categories
+// @Accept json
+// @Produce json
+// @Param createCategory body binder.CreateCategoryRequest true "Create Category Request"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /categories [post]
 func (c *categoryHandler) CreateCategory(ctx echo.Context) error {
 	var input binder.CreateCategoryRequest
 
@@ -76,6 +105,17 @@ func (c *categoryHandler) CreateCategory(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, response.SuccessResponse(http.StatusOK, "success create category", category))
 }
 
+// DeleteCategory godoc
+// @Summary Delete a category
+// @Description Delete a category
+// @Tags categories
+// @Accept json
+// @Produce json
+// @Param deleteCategory body binder.DeleteCategoryRequest true "Delete Category Request"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /categories [delete]
 func (c *categoryHandler) DeleteCategory(ctx echo.Context) error {
 	var input binder.DeleteCategoryRequest
 
@@ -95,6 +135,17 @@ func (c *categoryHandler) DeleteCategory(ctx echo.Context) error {
 }
 
 
+// UpdateCategory godoc
+// @Summary Update a category
+// @Description Update a category
+// @Tags categories
+// @Accept json
+// @Produce json
+// @Param updateCategory body binder.UpdateCategoryRequest true "Update Category Request"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /categories [put]
 func (c *categoryHandler) UpdateCategory(ctx echo.Context) error {
 	var input binder.UpdateCategoryRequest
 

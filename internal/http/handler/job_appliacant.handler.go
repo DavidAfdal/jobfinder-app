@@ -30,6 +30,18 @@ func NewJobApplicantsHandler(jobApplicantsService service.JobApplicantService) J
 }
 
 
+// ApplyJob godoc
+// @Summary Apply for a job
+// @Description Apply for a job
+// @Tags job-applicants
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param applyJob body binder.ApplyJobRequest true "Apply Job Request"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /job-applicants/apply [post]
 func (h *jobApplicantsHandler) ApplyJob(ctx echo.Context) error {
 
 	dataUser, _ := ctx.Get("user").(*jwt.Token)
@@ -56,6 +68,19 @@ func (h *jobApplicantsHandler) ApplyJob(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, response.SuccessResponse(http.StatusOK, "success apply job", nil))
 }
 
+
+// WithdrawnJobApplicants godoc
+// @Summary Withdraw job application
+// @Description Withdraw job application
+// @Tags job-applicants
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param withdrawJob body binder.WithdrawJobRequest true "Withdraw Job Request"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /job-applicants/withdraw [post]
 func (h *jobApplicantsHandler) WithdrawnJobApplicants(ctx echo.Context) error {
 	dataUser, _ := ctx.Get("user").(*jwt.Token)
 	claims := dataUser.Claims.(*token.JwtCustomClaims)
@@ -76,6 +101,18 @@ func (h *jobApplicantsHandler) WithdrawnJobApplicants(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, response.SuccessResponse(http.StatusOK, "success withdraw job", nil))
 }
 
+// FindJobApplicantsByID godoc
+// @Summary Find job applicant by ID
+// @Description Find job applicant by ID
+// @Tags job-applicants
+// @Accept json
+// @Security BearerAuth
+// @Produce json
+// @Param id path string true "Job Applicant ID"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /job-applicants/{id} [get]
 func (h *jobApplicantsHandler) FindJobApplicantsByID(ctx echo.Context) error {
 
 	var input binder.FindJobApplicantByIDRequest
@@ -97,6 +134,18 @@ func (h *jobApplicantsHandler) FindJobApplicantsByID(ctx echo.Context) error {
 
 }
 
+// ApproveApplicant godoc
+// @Summary Approve job applicant
+// @Description Approve job applicant
+// @Tags job-applicants
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param approveApplicant body binder.ApproveApplicantRequest true "Approve Applicant Request"
+// @Success 200 {object} response.Response
+// @Failure 400 {object} response.Response
+// @Failure 500 {object} response.Response
+// @Router /job-applicants/approve [post]
 func (h *jobApplicantsHandler) ApproveApplicant(ctx echo.Context) error {
 	dataUser, _ := ctx.Get("user").(*jwt.Token)
 	claims := dataUser.Claims.(*token.JwtCustomClaims)
