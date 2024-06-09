@@ -69,13 +69,6 @@ definitions:
       id:
         type: string
     type: object
-  binder.DeleteJobRequest:
-    properties:
-      id:
-        type: string
-    required:
-    - id
-    type: object
   binder.LoginRequest:
     properties:
       email:
@@ -175,6 +168,11 @@ paths:
       - application/json
       description: Delete a category
       parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
       - description: Delete Category Request
         in: body
         name: deleteCategory
@@ -196,6 +194,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
       summary: Delete a category
       tags:
       - categories
@@ -241,36 +241,9 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
       summary: Create a new category
-      tags:
-      - categories
-    put:
-      consumes:
-      - application/json
-      description: Update a category
-      parameters:
-      - description: Update Category Request
-        in: body
-        name: updateCategory
-        required: true
-        schema:
-          $ref: '#/definitions/binder.UpdateCategoryRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/response.Response'
-      summary: Update a category
       tags:
       - categories
   /categories/{id}:
@@ -300,49 +273,22 @@ paths:
       summary: Get a category by ID
       tags:
       - categories
-  /job-applicants/{id}:
-    get:
+    put:
       consumes:
       - application/json
-      description: Find job applicant by ID
+      description: Update a category
       parameters:
-      - description: Job Applicant ID
+      - description: Category ID
         in: path
         name: id
         required: true
         type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/response.Response'
-      security:
-      - BearerAuth: []
-      summary: Find job applicant by ID
-      tags:
-      - job-applicants
-  /job-applicants/apply:
-    post:
-      consumes:
-      - application/json
-      description: Apply for a job
-      parameters:
-      - description: Apply Job Request
+      - description: Update Category Request
         in: body
-        name: applyJob
+        name: updateCategory
         required: true
         schema:
-          $ref: '#/definitions/binder.ApplyJobRequest'
+          $ref: '#/definitions/binder.UpdateCategoryRequest'
       produces:
       - application/json
       responses:
@@ -360,103 +306,10 @@ paths:
             $ref: '#/definitions/response.Response'
       security:
       - BearerAuth: []
-      summary: Apply for a job
+      summary: Update a category
       tags:
-      - job-applicants
-  /job-applicants/approve:
-    post:
-      consumes:
-      - application/json
-      description: Approve job applicant
-      parameters:
-      - description: Approve Applicant Request
-        in: body
-        name: approveApplicant
-        required: true
-        schema:
-          $ref: '#/definitions/binder.ApproveApplicantRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/response.Response'
-      security:
-      - BearerAuth: []
-      summary: Approve job applicant
-      tags:
-      - job-applicants
-  /job-applicants/withdraw:
-    post:
-      consumes:
-      - application/json
-      description: Withdraw job application
-      parameters:
-      - description: Withdraw Job Request
-        in: body
-        name: withdrawJob
-        required: true
-        schema:
-          $ref: '#/definitions/binder.WithdrawJobRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/response.Response'
-      security:
-      - BearerAuth: []
-      summary: Withdraw job application
-      tags:
-      - job-applicants
+      - categories
   /jobs:
-    delete:
-      description: Delete a job
-      parameters:
-      - description: Delete Job Request
-        in: body
-        name: job
-        required: true
-        schema:
-          $ref: '#/definitions/binder.DeleteJobRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/response.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/response.Response'
-      security:
-      - BearerAuth: []
-      summary: Delete a job
-      tags:
-      - jobs
     get:
       description: Get all jobs
       produces:
@@ -502,15 +355,17 @@ paths:
       summary: Create a new job
       tags:
       - jobs
-    put:
-      description: Update a job
+  /jobs/{JobApplicantID}/applications:
+    get:
+      consumes:
+      - application/json
+      description: Find job applicant by ID
       parameters:
-      - description: Update Job Request
-        in: body
-        name: job
+      - description: Job Applicant ID
+        in: path
+        name: JobApplicantID
         required: true
-        schema:
-          $ref: '#/definitions/binder.UpdateJobRequest'
+        type: string
       produces:
       - application/json
       responses:
@@ -528,10 +383,112 @@ paths:
             $ref: '#/definitions/response.Response'
       security:
       - BearerAuth: []
-      summary: Update a job
+      summary: Find job applicant by ID
+      tags:
+      - job-applicants
+  /jobs/{JobApplicantID}/approve:
+    post:
+      consumes:
+      - application/json
+      description: Approve job applicant
+      parameters:
+      - description: Job Applicant ID
+        in: path
+        name: JobApplicantID
+        required: true
+        type: string
+      - description: Approve Applicant Request
+        in: body
+        name: approveApplicant
+        required: true
+        schema:
+          $ref: '#/definitions/binder.ApproveApplicantRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: Approve job applicant
+      tags:
+      - job-applicants
+  /jobs/{JobApplicantID}/withdraw:
+    post:
+      consumes:
+      - application/json
+      description: Withdraw job application
+      parameters:
+      - description: Job Applicant ID
+        in: path
+        name: JobApplicantID
+        required: true
+        type: string
+      - description: Withdraw Job Request
+        in: body
+        name: withdrawJob
+        required: true
+        schema:
+          $ref: '#/definitions/binder.WithdrawJobRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: Withdraw job application
+      tags:
+      - job-applicants
+  /jobs/{id}:
+    delete:
+      description: Delete a job
+      parameters:
+      - description: Job ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: Delete a job
       tags:
       - jobs
-  /jobs/{id}:
     get:
       description: Get job by ID
       parameters:
@@ -558,6 +515,77 @@ paths:
       summary: Get job by ID
       tags:
       - jobs
+    put:
+      description: Update a job
+      parameters:
+      - description: Job ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update Job Request
+        in: body
+        name: job
+        required: true
+        schema:
+          $ref: '#/definitions/binder.UpdateJobRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: Update a job
+      tags:
+      - jobs
+  /jobs/{jobID}/apply:
+    post:
+      consumes:
+      - application/json
+      description: Apply for a job
+      parameters:
+      - description: Job ID
+        in: path
+        name: jobID
+        required: true
+        type: string
+      - description: Apply Job Request
+        in: body
+        name: applyJob
+        required: true
+        schema:
+          $ref: '#/definitions/binder.ApplyJobRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
+      security:
+      - BearerAuth: []
+      summary: Apply for a job
+      tags:
+      - job-applicants
   /jobs/applied:
     get:
       description: Get applied jobs

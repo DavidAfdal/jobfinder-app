@@ -163,12 +163,13 @@ func (h * jobHandler) CreateJob(ctx echo.Context) error {
 // @Description Update a job
 // @Tags jobs
 // @Produce json
+// @Param id path string true "Job ID"
 // @Param job body binder.UpdateJobRequest true "Update Job Request"
 // @Security BearerAuth
 // @Success 200 {object} response.Response
 // @Failure 400 {object} response.Response
 // @Failure 500 {object} response.Response
-// @Router /jobs [put]
+// @Router /jobs/{id} [put]
 func (h *jobHandler) UpdateJob(ctx echo.Context) error {
    var input binder.UpdateJobRequest
 
@@ -194,11 +195,11 @@ func (h *jobHandler) UpdateJob(ctx echo.Context) error {
 // @Tags jobs
 // @Produce json
 // @Security BearerAuth
-// @Param job body binder.DeleteJobRequest true "Delete Job Request"
+// @Param id path string true "Job ID"
 // @Success 200 {object} response.Response
 // @Failure 400 {object} response.Response
 // @Failure 500 {object} response.Response
-// @Router /jobs [delete]
+// @Router /jobs/{id} [delete]
 func (h *jobHandler) DeleteJob(ctx echo.Context) error {
 	var input binder.DeleteJobRequest
 

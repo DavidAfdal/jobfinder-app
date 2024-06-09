@@ -82,6 +82,7 @@ func (c *categoryHandler) FindCategoryByID(ctx echo.Context)  error {
 // @Tags categories
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param createCategory body binder.CreateCategoryRequest true "Create Category Request"
 // @Success 200 {object} response.Response
 // @Failure 400 {object} response.Response
@@ -111,6 +112,8 @@ func (c *categoryHandler) CreateCategory(ctx echo.Context) error {
 // @Tags categories
 // @Accept json
 // @Produce json
+// @Security BearerAuth
+// @Param id path string true "Category ID"
 // @Param deleteCategory body binder.DeleteCategoryRequest true "Delete Category Request"
 // @Success 200 {object} response.Response
 // @Failure 400 {object} response.Response
@@ -141,11 +144,13 @@ func (c *categoryHandler) DeleteCategory(ctx echo.Context) error {
 // @Tags categories
 // @Accept json
 // @Produce json
+// @Security BearerAuth
+// @Param id path string true "Category ID"
 // @Param updateCategory body binder.UpdateCategoryRequest true "Update Category Request"
 // @Success 200 {object} response.Response
 // @Failure 400 {object} response.Response
 // @Failure 500 {object} response.Response
-// @Router /categories [put]
+// @Router /categories/{id} [put]
 func (c *categoryHandler) UpdateCategory(ctx echo.Context) error {
 	var input binder.UpdateCategoryRequest
 

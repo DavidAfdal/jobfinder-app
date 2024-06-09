@@ -37,11 +37,12 @@ func NewJobApplicantsHandler(jobApplicantsService service.JobApplicantService) J
 // @Accept json
 // @Produce json
 // @Security BearerAuth
+// @Param jobID path string true "Job ID"
 // @Param applyJob body binder.ApplyJobRequest true "Apply Job Request"
 // @Success 200 {object} response.Response
 // @Failure 400 {object} response.Response
 // @Failure 500 {object} response.Response
-// @Router /job-applicants/apply [post]
+// @Router /jobs/{jobID}/apply [post]
 func (h *jobApplicantsHandler) ApplyJob(ctx echo.Context) error {
 
 	dataUser, _ := ctx.Get("user").(*jwt.Token)
@@ -76,11 +77,12 @@ func (h *jobApplicantsHandler) ApplyJob(ctx echo.Context) error {
 // @Security BearerAuth
 // @Accept json
 // @Produce json
+// @Param JobApplicantID path string true "Job Applicant ID"
 // @Param withdrawJob body binder.WithdrawJobRequest true "Withdraw Job Request"
 // @Success 200 {object} response.Response
 // @Failure 400 {object} response.Response
 // @Failure 500 {object} response.Response
-// @Router /job-applicants/withdraw [post]
+// @Router /jobs/{JobApplicantID}/withdraw [post]
 func (h *jobApplicantsHandler) WithdrawnJobApplicants(ctx echo.Context) error {
 	dataUser, _ := ctx.Get("user").(*jwt.Token)
 	claims := dataUser.Claims.(*token.JwtCustomClaims)
@@ -108,11 +110,11 @@ func (h *jobApplicantsHandler) WithdrawnJobApplicants(ctx echo.Context) error {
 // @Accept json
 // @Security BearerAuth
 // @Produce json
-// @Param id path string true "Job Applicant ID"
+// @Param JobApplicantID path string true "Job Applicant ID"
 // @Success 200 {object} response.Response
 // @Failure 400 {object} response.Response
 // @Failure 500 {object} response.Response
-// @Router /job-applicants/{id} [get]
+// @Router /jobs/{JobApplicantID}/applications [get]
 func (h *jobApplicantsHandler) FindJobApplicantsByID(ctx echo.Context) error {
 
 	var input binder.FindJobApplicantByIDRequest
@@ -141,11 +143,12 @@ func (h *jobApplicantsHandler) FindJobApplicantsByID(ctx echo.Context) error {
 // @Accept json
 // @Produce json
 // @Security BearerAuth
+// @Param JobApplicantID path string true "Job Applicant ID"
 // @Param approveApplicant body binder.ApproveApplicantRequest true "Approve Applicant Request"
 // @Success 200 {object} response.Response
 // @Failure 400 {object} response.Response
 // @Failure 500 {object} response.Response
-// @Router /job-applicants/approve [post]
+// @Router /jobs/{JobApplicantID}/approve [post]
 func (h *jobApplicantsHandler) ApproveApplicant(ctx echo.Context) error {
 	dataUser, _ := ctx.Get("user").(*jwt.Token)
 	claims := dataUser.Claims.(*token.JwtCustomClaims)
