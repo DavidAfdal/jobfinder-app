@@ -42,6 +42,51 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             whoami
+
+            docker volume create postgres_data
+            docker volume create redis_data
+
             docker stop finder-job || true && docker rm finder-job || true
+            docker stop postgres || true && docker rm postgres || true
+            docker stop redis || true && docker rm redis || true
+
+
             docker pull ${{ secrets.DOCKER_USERNAME }}/finder-job:latest
-            docker run -d -p 8080:8080 --name ${{ vars.CONTAINER_NAME }} ${{ secrets.DOCKER_USERNAME }}/finder-job:latest
+            docker pull postgres:latest
+            docker pull redis:latest
+
+
+            docker run -d \
+              --name postgres \
+              -e POSTGRES_USER=david \
+              -e POSTGRES_PASSWORD=gelang123 \
+              -e POSTGRES_DB=finder-job-db \
+              -v postgres_data:/var/lib/postgresql/data \
+              -p 5432:5432 \
+              postgres:latest
+
+
+            docker run -d \
+              --name redis \
+              -v redis_data:/data \
+              -p 6379:6379 \
+              redis:latest
+
+
+            docker run -d \
+              --name finder-job \
+              --link postgres:db \
+              --link redis:redis \
+              -e POSTGRES_HOST=${{ secrets.SERVER }} \
+              -e POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} \
+              -e POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
+              -e POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
+              -e POSTGRES_DATABASE=${{ secrets.POSTGRES_DATABASE }} \
+              -e REDIS_HOST=${{ secrets.SERVER }} \
+              -e REDIS_PORT=${{ secrets.REDIS_PORT }} \
+              -e REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} \
+              -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
+              -e ENCRYPT_SECRET_KEY=${{ secrets.ENCRYPT_SECRET_KEY }} \
+              -e ENCRYPT_IV=${{ secrets.ENCRYPT_IV }} \
+              -p 8080:8080 \
+              ${{ secrets.DOCKER_USERNAME }}/finder-job:latest
