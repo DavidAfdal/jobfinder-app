@@ -26,7 +26,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/finder-job:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/finder-job:latest
 
   deployment:
     needs: build
