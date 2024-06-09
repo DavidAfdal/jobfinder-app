@@ -187,7 +187,7 @@ func (h *userHandler) ProfileUser(ctx echo.Context) error {
 // @Tags users
 // @Accept json
 // @Produce json
-// @Param request body binder.UserFindByIDRequest true "Find User by ID Request"
+// @Param request body binder.UserFindByIDRequest true "Find User by ID Reques"
 // @Success 200 {object} response.Response
 // @Failure 400 {object} response.Response
 // @Failure 500 {object} response.Response
