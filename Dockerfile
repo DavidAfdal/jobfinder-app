@@ -24,7 +24,7 @@ WORKDIR /app
 
 # Copy the binary from the builder stage to this stage
 COPY --from=builder /app/myapp .
-COPY --from=builder /app/.env-example .
+COPY --from=builder /app/.env .
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
