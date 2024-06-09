@@ -1,35 +1,34 @@
-# Stage 1: Build the Go application
-FROM golang:1.20-alpine AS builder
+# Stage 1: Build the Go binary
+FROM golang:latest AS builder
 
-# Install git
-RUN apk update && apk add --no-cache git
-
-# Set the Current Working Directory inside the container
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy go mod and sum files
+# Copy the Go modules files
 COPY go.mod go.sum ./
 
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+# Download and install Go modules
 RUN go mod download
 
-# Copy the source from the current directory to the Working Directory inside the container
+# Copy the source code into the container
 COPY . .
 
-# Build the Go app
+# Build the Go binary
 RUN CGO_ENABLED=0 GOOS=linux go build -o myapp cmd/app/main.go
 
-# Stage 2: Run the Go application
+# Stage 2: Create a lightweight image to run the binary
 FROM alpine:latest
 
-# Set the Current Working Directory inside the container
-WORKDIR /root/
+# Set the working directory inside the container
+WORKDIR /app
 
-# Copy the Pre-built binary file from the previous stage
+# Copy the binary from the builder stage to this stage
 COPY --from=builder /app/myapp .
 
-# Expose port 8080 (adjust this if your app uses a different port)
+
+# Expose port 8080 to the outside world
 EXPOSE 8080
 
 # Command to run the executable
 CMD ["./myapp"]
+
