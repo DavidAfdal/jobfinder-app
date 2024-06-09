@@ -15,6 +15,7 @@ type User struct {
 	Address string `json:"address,omitempty"`
 	PhoneNumber string `json:"phone_number,omitempty"`
 	Gender string `json:"gender,omitempty"`
+	Role string `json:"-"`
 	Audit
 }
 
@@ -23,7 +24,7 @@ func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func NewUser(name string, email string, password string, address string, phoneNumber string, gender string) *User {
+func NewUser(name string, email string, password string, address string, phoneNumber string, gender string, Role string) *User {
 	return &User{
 		Name: name,
 		Email: email,
@@ -31,6 +32,7 @@ func NewUser(name string, email string, password string, address string, phoneNu
 		Address: address,
 		PhoneNumber: phoneNumber,
 		Gender: gender,
+		Role: Role,
 		Audit: NewAuditTable(),
 	}
 }

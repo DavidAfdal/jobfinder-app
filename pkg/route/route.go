@@ -6,4 +6,5 @@ type Route struct {
 	Methode string
 	Path string
 	Handler echo.HandlerFunc
+	Role []string
 }

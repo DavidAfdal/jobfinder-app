@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/DavidAfdal/workfinder/config"
+	_ "github.com/DavidAfdal/workfinder/docs"
 	"github.com/DavidAfdal/workfinder/internal/builder"
 	"github.com/DavidAfdal/workfinder/pkg/cache"
 	"github.com/DavidAfdal/workfinder/pkg/postgres"
@@ -9,6 +10,24 @@ import (
 	"github.com/DavidAfdal/workfinder/pkg/token"
 )
 
+// @title Swagger Example API
+// @version 1.0
+// @description This is a sample server Petstore server.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:8080
+// @BasePath /api/v1
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	cfg, err := config.NewConfig(".env")
 	checkError(err)

@@ -52,6 +52,7 @@ func (s *userService) Login(email string, password string) (string, error) {
 	claims := token.JwtCustomClaims{
 		ID: user.ID,
 		Email: user.Email,
+		Role: user.Role,
 		Address: user.Address,
 		PhoneNumber: user.PhoneNumber,
 		RegisteredClaims: jwt.RegisteredClaims{

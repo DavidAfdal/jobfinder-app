@@ -16,6 +16,7 @@ type JwtCustomClaims struct {
 	ID     uuid.UUID `json:"id"`
 	Email  string `json:"email"`
 	Address string `json:"address"`
+	Role     string `json:"role"`
 	PhoneNumber   string `json:"phone_number"`
 	jwt.RegisteredClaims
 }

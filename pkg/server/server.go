@@ -16,6 +16,7 @@ import (
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 
@@ -23,14 +24,22 @@ type Server struct {
 	*echo.Echo
 }
 
+
+
 func NewServer(serverName string, publicRoutes, privateRoutes []*route.Route, secretKey string) *Server {
 	e := echo.New()
 
 
 	e.Use(
 		middleware.Logger(),
-		middleware.CORS(),
+		middleware.CORSWithConfig(middleware.CORSConfig{
+			AllowOrigins: []string{"*"},
+			AllowMethods: []string{echo.GET, echo.POST, echo.PUT,echo.PATCH, echo.DELETE, echo.OPTIONS},
+		}),
 	)
+
+
+    e.GET("/swagger/*", echoSwagger.WrapHandler)
 	e.GET("/", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, response.SuccessResponse(http.StatusOK, "Welcome to WorkFinder API", nil))
 	})
@@ -44,7 +53,7 @@ func NewServer(serverName string, publicRoutes, privateRoutes []*route.Route, se
 	}
 	if len(privateRoutes) > 0 {
 		for _, route := range privateRoutes {
-			v1.Add(route.Methode, route.Path, route.Handler, JWTProtection(secretKey))
+			v1.Add(route.Methode, route.Path, route.Handler, JWTProtection(secretKey), RBACMiddleware(route.Role...))
 		}
 	}
 
@@ -90,9 +99,39 @@ func JWTProtection(secretKey string) echo.MiddlewareFunc {
 		},
 		SigningKey: []byte(secretKey),
 		ErrorHandler: func(c echo.Context, err error) error {
-			return c.JSON(http.StatusUnauthorized, response.ErrorResponse(http.StatusUnauthorized, "anda harus login untuk mengakses resource ini"))
+			return c.JSON(http.StatusUnauthorized, response.ErrorResponse(http.StatusUnauthorized, "you must login first"))
 		},
 	})
+}
+
+
+func RBACMiddleware(roles ...string) echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			user, ok := c.Get("user").(*jwt.Token)
+			if !ok {
+				return c.JSON(http.StatusUnauthorized, response.ErrorResponse(http.StatusUnauthorized,"Please login first"))
+			}
+
+			claims := user.Claims.(*token.JwtCustomClaims)
+
+			// Check if the user has the required role
+			if !contains(roles, claims.Role) {
+				return c.JSON(http.StatusForbidden, response.ErrorResponse(http.StatusForbidden, "your role is not allowed to access this resource") )
+			}
+
+			return next(c)
+		}
+	}
+}
+
+func contains(slice []string, s string) bool {
+	for _, value := range slice {
+		if value == s {
+			return true
+		}
+	}
+	return false
 }
 
 
