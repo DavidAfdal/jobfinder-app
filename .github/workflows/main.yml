@@ -33,7 +33,7 @@ jobs:
     environment: stagging
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy
+      - name: Deploy to vps
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER }}
